@@ -1,0 +1,17 @@
+[build-cache]
+alias=bc
+
+[clear-cache]
+alias=cc
+
+[clear-metadata-cache]
+alias=cmc
+
+[make-symlink]
+alias=ln
+
+[missing-previews]
+alias=mp
+
+[set-preview]
+alias=sp

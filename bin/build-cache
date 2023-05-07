@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+shopt -s globstar nullglob
+
+RESET=$'\e[0m'
+BOLD=$'\e[1m'
+LGREEN=$'\e[92m'
+LWHITE=$'\e[97m'
+
+public="$(dirname "$0")/../public"
+target=${1-$public}
+
+for file in "$target"/**/*.jpg; do
+    [[ $file = */_files/* ]] && continue
+    [[ $file = */_preview.jpg ]] && continue
+
+    path=$(realpath --relative-to="$public" "$file")
+    echo "${LWHITE}${BOLD}$path${RESET}"
+
+    for size in 320 480; do
+        if ! output=$(http --headers head https://files.djm.me/index.php "resize==$size" "file==$path"); then
+            exit 1
+        elif ! message=$(echo "$output" | grep '^files-msg: ' | sed 's/^files-msg: //'); then
+            echo "$output" | sed 's/^/  /'
+            exit 1
+        elif [[ $message = *'image cached'* ]]; then
+            echo "  $size: ${LGREEN}$message${RESET}"
+        else
+            echo "  $size: $message"
+        fi
+    done
+done

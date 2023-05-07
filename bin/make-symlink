@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+if [[ $# -lt 1 ]]; then
+    echo "Usage: ${BIN_COMMAND-$0} <target> [destination=.]" >&2
+    exit 1
+fi
+
+target=$1
+destination=${2-.}
+
+root="$(dirname "$0")/.."
+
+# Allow URLs to be used, including popups
+if [[ $target = *://* ]]; then
+    target=${target/\#pid=/\/}
+    target=${target/\/\?/\/}
+
+    public="$root/public"
+    target=${target/https:\/\/files.djm.me/$public}
+
+    urldecode() { local i="${*//+/ }"; echo -e "${i//%/\\x}"; }
+    target=$(urldecode "$target")
+fi
+
+# If the basenames are different, Files.gallery displays the destination name
+# instead of the symlink name, so we need to symlink all of the files
+# inside the target instead
+if [[ ! -d $destination && "$(basename "$target")" != "$(basename "$destination")" ]]; then
+    echo 'Symlinking files individually'
+    mkdir -p "$destination"
+
+    for target_file in "$target/"*; do
+        "$0" "$target_file" "$destination"
+    done
+
+    exit
+fi
+
+# Make the link relative, in case the base directory is changed
+if [[ -d $destination ]]; then
+    target=$(realpath --no-symlinks --relative-to="$destination" "$target")
+else
+    target=$(realpath --no-symlinks --relative-to="$(dirname "$destination")" "$target")
+fi
+
+# Create the link
+exec ln -s "$target" "$destination"

@@ -1,0 +1,2 @@
+# Treat index.php as binary since it is maintained elsewhere
+/public/index.php binary

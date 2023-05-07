@@ -1,0 +1,11 @@
+/config/
+
+/public/*
+!/public/index.php
+!/public/robots.txt
+!/public/_files/
+
+/public/_files/cache/*
+/public/_files/config/local.php
+
+!.gitkeep

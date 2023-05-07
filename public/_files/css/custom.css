@@ -1,0 +1,8 @@
+:root {
+    --primary-color: #d7431b;
+}
+
+.info-warning {
+    background-color: #ffd241;
+    color: #000a;
+}
