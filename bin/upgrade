@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+cd "$(dirname "$0")/.."
+
+wget https://cdn.jsdelivr.net/npm/files.photo.gallery/index.php -O public/index.php
