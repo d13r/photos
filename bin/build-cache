@@ -18,7 +18,7 @@ for file in "$target"/**/*.jpg; do
     echo "${LWHITE}${BOLD}$path${RESET}"
 
     for size in 320 480; do
-        if ! output=$(http --headers head https://files.djm.me/index.php "resize==$size" "file==$path"); then
+        if ! output=$(http --headers head https://photos.djm.me/index.php "resize==$size" "file==$path"); then
             exit 1
         elif ! message=$(echo "$output" | grep '^files-msg: ' | sed 's/^files-msg: //'); then
             echo "$output" | sed 's/^/  /'

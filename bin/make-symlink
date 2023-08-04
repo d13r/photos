@@ -17,7 +17,7 @@ if [[ $target = *://* ]]; then
     target=${target/\/\?/\/}
 
     public="$root/public"
-    target=${target/https:\/\/files.djm.me/$public}
+    target=${target/https:\/\/photos.djm.me/$public}
 
     urldecode() { local i="${*//+/ }"; echo -e "${i//%/\\x}"; }
     target=$(urldecode "$target")
@@ -26,7 +26,7 @@ fi
 # If the basenames are different, Files.gallery displays the destination name
 # instead of the symlink name, so we need to symlink all of the files
 # inside the target instead
-if [[ ! -d $destination && "$(basename "$target")" != "$(basename "$destination")" ]]; then
+if [[ -d $target && ! -d $destination && "$(basename "$target")" != "$(basename "$destination")" ]]; then
     echo 'Symlinking files individually'
     mkdir -p "$destination"
 

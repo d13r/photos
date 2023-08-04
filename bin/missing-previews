@@ -2,4 +2,7 @@
 set -o errexit -o nounset -o pipefail
 cd "$(dirname "$0")/../public"
 
-exec find Photos -type d '!' -exec test -f '{}/_preview.jpg' ';' -print | sed 's#$#/#' | sort
+exec find . -type d '!' -exec test -f '{}/_preview.jpg' ';' -print \
+    | grep -v '/_files' \
+    | sed 's#^\./##; s#$#/#' \
+    | sort
