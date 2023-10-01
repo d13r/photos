@@ -14,7 +14,7 @@ for file in "$target"/**/*.jpg; do
     [[ $file = */_files/* ]] && continue
     [[ $file = */_preview.jpg ]] && continue
 
-    path=$(realpath --relative-to="$public" "$file")
+    path=$(realpath --no-symlinks --relative-to="$public" "$file")
     echo "${LWHITE}${BOLD}$path${RESET}"
 
     for size in 320 480; do
